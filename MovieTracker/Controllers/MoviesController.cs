@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieTracker.Data;
 using MovieTracker.Models;
 using MovieTracker.Models.DTO;
+using MovieTracker.Services;
 
 namespace MovieTracker.Controllers
 {
@@ -16,10 +17,12 @@ namespace MovieTracker.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMovieService _movieService;
 
-        public MoviesController(ApplicationDbContext context)
+        public MoviesController(ApplicationDbContext context, IMovieService movieService)
         {
             _context = context;
+            _movieService = movieService;
         }
 
         [HttpGet]
@@ -30,60 +33,41 @@ namespace MovieTracker.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMovie([FromBody] MovieDto movieDto)
+        public async Task<IActionResult> CreateMovie([FromForm] MovieDto movieDto)
         {
-            var categories = new List<Category>();
-
-            // Itera sobre cada categoría del cuerpo de la solicitud POST y verifica si ya existe en la base de datos
-            // Si existe, agréguela a la lista de categorías para esta película
-            foreach (var category in movieDto.Categories)
+            ModelState.Remove("MediaUrl");
+            if (ModelState.IsValid)
             {
-                var existingCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Name == category.Name);
-                if (existingCategory != null)
-                {
-                    categories.Add(existingCategory);
-                }
-                else
-                {
-                    categories.Add(new Category { Name = category.Name });
-                }
+                var newMovie = await _movieService.CreateMovie(movieDto);
+                return Ok(newMovie);
             }
-
-            // Crea la nueva película y agrega las categorías relacionadas
-            var newMovie = new Movie
+            else
             {
-                Title = movieDto.Title,
-                Description = movieDto.Description,
-                ReleaseDate = movieDto.ReleaseDate,
-                Duration = TimeSpan.Parse(movieDto.Duration),
-                Rate = 0,
-                Categories = categories
-            };
-
-            _context.Movies.Add(newMovie);
-            await _context.SaveChangesAsync();
-
-            return Ok(newMovie);
+                return StatusCode(422);
+            }
+           
         }
 
         // DELETE: api/Movies/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(int id)
+        public async Task<IActionResult> DeleteMovie(Guid id)
         {
             if (_context.Movies == null)
             {
                 return NotFound();
             }
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            
+            
+            var result = await _movieService.DeleteMovie(id);
+            if(result)
+            {
+                return NoContent();
+            }
+            else
             {
                 return NotFound();
             }
-
-            _context.Movies.Remove(movie);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            
         }
 
         // GET: api/Movies

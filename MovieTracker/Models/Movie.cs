@@ -11,6 +11,8 @@ namespace MovieTracker.Models
         public TimeSpan Duration { get; set; }
         public float Rate { get; set; }
 
+        public string MediaUrl { get; set; }
+
         public ICollection<Category> Categories { get; set; }
     }
 }

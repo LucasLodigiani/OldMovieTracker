@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MovieTracker.Data;
 using MovieTracker.Models;
+using MovieTracker.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 //SwaggerGEN
 //builder.Services.AddSwaggerGen(options =>
