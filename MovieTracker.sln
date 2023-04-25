@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTracker", "MovieTracker\MovieTracker.csproj", "{C9ABE710-AE64-4B8D-9A38-7AB0E3CFDAC1}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Frontend-Web", "frontend-web\Frontend-Web.esproj", "{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C9ABE710-AE64-4B8D-9A38-7AB0E3CFDAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9ABE710-AE64-4B8D-9A38-7AB0E3CFDAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9ABE710-AE64-4B8D-9A38-7AB0E3CFDAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9ABE710-AE64-4B8D-9A38-7AB0E3CFDAC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{673AD8FB-1CF2-45E0-AA01-530AB9E99BD9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24D250CF-D4C9-4FA7-9B1E-DC0390940A07}
+	EndGlobalSection
+EndGlobal
