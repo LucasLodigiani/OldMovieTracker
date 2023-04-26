@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import Layout from './components/Layout';
 import reportWebVitals from './reportWebVitals';
+import Login from "./components/Auth/Login";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Layout />
+    <Login />
   </React.StrictMode>
 );
 

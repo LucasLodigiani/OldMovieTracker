@@ -16,38 +16,40 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddTransient<IMovieService, MovieService>();
+
+builder.Services.AddTransient<IAuthService, AuthService>();
 
 //SwaggerGEN
-//builder.Services.AddSwaggerGen(options =>
-//{
-//    options.SwaggerDoc("v0.0.1", new OpenApiInfo { Title = "MovieTracker", Version = "v0.0.1" });
-//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//    {
-//        Description = @"Autorización JWT Header utilizando Bearer Scheme. Ingresa Bearer [espacio] y el token jwt,
-//        Ejemplo: 'Bearer 12345abcdef'",
-//        Name = "Autorización",
-//        In = ParameterLocation.Header,
-//        Type = SecuritySchemeType.ApiKey,
-//        Scheme = "Bearer"
-//    });
-//    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-//    {
-//        {
-//            new OpenApiSecurityScheme
-//            {
-//                Reference = new OpenApiReference
-//                {
-//                    Type = ReferenceType.SecurityScheme,
-//                    Id = "Bearer"
-//                }
-//            },
-//            new string[] {}
-//        }
-//    });
-//});
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieTracker", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = @"Autorización JWT Header utilizando el esquema Bearer. Ingresa Bearer [espacio] y el token jwt,
+        Ejemplo: 'Bearer 12345abcdef'",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
 
 
 var _GetConnectionString = builder.Configuration.GetConnectionString("MovieTrackerDB");

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MovieTracker.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
@@ -19,7 +19,7 @@ namespace MovieTracker.Services
             _configuration = configuration;
 
         }
-        public async Task<(int, string)> Registeration(RegistrationModel model, string role)
+        public async Task<(int, string)> Register(RegistrationModel model, string role)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
