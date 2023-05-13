@@ -2,14 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Layout from './components/Layout';
+import Header from './components/Header';
 import reportWebVitals from './reportWebVitals';
 import Login from "./components/Auth/Login";
+import Home from "./components/Home";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Layout />
-    <Login />
+    <Header></Header>
+    <Home></Home>    
   </React.StrictMode>
 );
 
