@@ -2,4 +2,4 @@
 
 
 //base url es para tener la url de la api y no repetir el código en cada componente
-export const base_url = 'https://localhost:7082/';
+export const base_url = 'https://localhost:7086';

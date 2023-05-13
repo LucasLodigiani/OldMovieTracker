@@ -11,11 +11,14 @@ namespace MovieTracker.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
+        //private readonly HttpContextAccessor _contextAccessor;
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger, HttpContextAccessor contextAccessor)
         {
             _authService = authService;
             _logger = logger;
+            //_contextAccessor = contextAccessor;
+
         }
 
 
@@ -62,7 +65,14 @@ namespace MovieTracker.Controllers
             }
         }
 
-       
+        //[HttpGet]
+        //[Route("TokenCheck")]
+        //public async Task<IActionResult> TokenCheck()
+        //{
+        //    return Ok();
+        //}
+
+
     }
 }
 
