@@ -1,9 +1,13 @@
-import React from 'react';
+import React from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 
 function Layout() {
-    return (
-        <p>Hello world!</p>
-    );
+  const {id} = useParams();
+  if(id === null || id === undefined){
+    return <p>404 Not Found</p>
+  }
+  console.log(id);
+  return <></>;
 }
 
 export default Layout;
