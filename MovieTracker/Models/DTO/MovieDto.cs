@@ -1,9 +1,15 @@
 ﻿using Microsoft.Build.Framework;
+using Newtonsoft.Json;
 
 namespace MovieTracker.Models.DTO
 {
     public class MovieDto
     {
+        [JsonIgnore]
+        public string? Id { get; set; }
+
+        [JsonIgnore]
+        public float? Rate { get; set; }
         [Required]
         public string Title { get; set; }
 

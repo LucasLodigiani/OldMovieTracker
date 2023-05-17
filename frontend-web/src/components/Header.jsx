@@ -1,24 +1,54 @@
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import User from '../utils/User';
+import { base_url } from "../utils/Config";
+
+
+
+//<Nav.Link href="#features">Features</Nav.Link>
+//<Nav.Link href="#pricing">Pricing</Nav.Link>
 
 function Header() {
+  
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getMovies();
+  }, []);
+
+  function getMovies() {
+    fetch(base_url + "/api/Categories")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategories(data);
+        console.log(data)
+      })
+      .catch((error) => {
+        console.error("Error al obtener las películas", error);
+      });
+  }
+
+  const handleLogout = () => {
+    User.Logout();
+  }
+
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="/">MovieTracker</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-            <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+            <NavDropdown title="Categorias" id="collasible-nav-dropdown">
+              {categories.map((category) => (
+                <NavDropdown.Item key={category.id} href={`#action/${category.id}`}>
+                  {category.name}
+                </NavDropdown.Item>
+              ))}
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
                 Separated link
@@ -26,10 +56,7 @@ function Header() {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
-            </Nav.Link>
+            {User.IsAuthenticated() === true ? <Nav.Link href="/" onClick={handleLogout}>Logout</Nav.Link> :  <Nav.Link eventKey={2} href="/login">Login</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
       </Container>

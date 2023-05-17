@@ -56,21 +56,19 @@ function Login() {
                 </div>
                 <div>
                     <label>
-                        Contraseña:
+                        ContraseÃ±a:
                         <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                     </label>
                 </div>
-                <button type="submit">Iniciar sesión</button>
+                <button type="submit">Iniciar sesion</button>
                 <p >{result}</p>
             </form>
 
-            <p>Prueba de vistas condicioandas</p>
+            <p>Informacion actual:</p>
+            {User.IsAuthenticated() === true ? <p>Estas autenticado</p> : <p>No estas autenticado</p>}
+        
+            {User.GetUserRole() !== false ? <p>Tu rol es {User.GetUserRole()}</p> : null}
 
-            {User.IsInRole("Admin") === true ? <p>Esta en el rol de admin</p> : <p>No esta en el rol de admin</p>}
-
-            {User.IsAuthenticated() === true ? <p>El usuario esta autenticado</p> : <p>El usuario no esta autenticado</p>}
-            
-            {User.GetUserRole() === "Admin" ? <p>Es admin</p> : <p>Es usuario</p>}
         </>
     );
 }

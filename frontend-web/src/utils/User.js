@@ -1,6 +1,14 @@
 
 
 class User {
+    /*Vistas condicionadas
+
+    {User.IsInRole("Admin") === true ? <p>Actualmente estas en el rol de admin</p> : <p>Actualmente no estas en el rol de admin</p>}
+
+    {User.IsAuthenticated() === true ? <p>Estas autenticado</p> : <p>No estas autenticado</p>}
+    
+    {User.GetUserRole() === "Admin" ? <p>Tu rol es admin</p> : <p>Tu rol es usuario u otro</p>}
+    */
     static GetUserRole() {
         const jwtToken = localStorage.getItem('JWT')
         if (jwtToken === null) {
@@ -39,9 +47,13 @@ class User {
             localStorage.removeItem('JWT');
             return false;
         } else {
-            console.log('El token sigue siendo válido.');
+            console.log('El token sigue siendo vï¿½lido.');
             return true;
         }
+    }
+
+    static Logout(){
+        localStorage.removeItem('JWT');
     }
 }
 

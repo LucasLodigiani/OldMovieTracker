@@ -13,7 +13,7 @@ namespace MovieTracker.Controllers
         private readonly ILogger<AuthController> _logger;
         //private readonly HttpContextAccessor _contextAccessor;
 
-        public AuthController(IAuthService authService, ILogger<AuthController> logger, HttpContextAccessor contextAccessor)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
             _logger = logger;

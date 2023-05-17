@@ -15,6 +15,39 @@ namespace MovieTracker.Services
             _env = env;
         }
 
+
+        public async Task<MovieDto> GetMovieById(string id)
+        {
+            //Verifica que el id sea un guid y lo guarda en una variable movieId
+            if (!Guid.TryParse(id, out Guid movieId))
+            {
+                return null;
+            }
+            var movie = await _context.Movies
+            .Include(m => m.Categories)
+            .FirstOrDefaultAsync(m => m.Id == movieId);
+
+
+
+            if (movie == null)
+            {
+                return null;
+            }
+            var movieDto = new MovieDto
+            {
+                Id = movie.Id.ToString(),
+                Title = movie.Title,
+                Description = movie.Description,
+                Categories = movie.Categories,
+                MediaUrl = movie.MediaUrl,
+                Duration = movie.Duration.ToString(),
+                ReleaseDate = movie.ReleaseDate,
+                Rate = movie.Rate
+            };
+            return movieDto;
+        }
+
+
         public async Task<Movie> CreateMovie(MovieDto movieDto)
         {
             var categories = new List<Category>();
@@ -114,6 +147,7 @@ namespace MovieTracker.Services
             }
             
         }
+
 
     }
 }

@@ -70,34 +70,21 @@ namespace MovieTracker.Controllers
             
         }
 
-        // GET: api/Movies
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Movie>>> GetMovie()
-        //{
-        //  if (_context.Movie == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    return await _context.Movie.ToListAsync();
-        //}
 
         // GET: api/Movies/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Movie>> GetMovie(int id)
-        //{
-        //  if (_context.Movie == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    var movie = await _context.Movie.FindAsync(id);
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MovieDto>> GetMovie(string id)
+        {
 
-        //    if (movie == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var movie = await _movieService.GetMovieById(id);
 
-        //    return movie;
-        //}
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            return movie;
+        }
 
         // PUT: api/Movies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
