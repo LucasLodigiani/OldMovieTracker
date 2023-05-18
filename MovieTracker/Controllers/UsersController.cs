@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MovieTracker.Models;
 using MovieTracker.Models.DTO;
+using System.Data;
 
 namespace MovieTracker.Controllers
 {
@@ -11,13 +12,17 @@ namespace MovieTracker.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(UserManager<User> userManager)
+
+        public UsersController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         [HttpGet]
+        [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
             var user = _userManager.Users
@@ -46,5 +51,41 @@ namespace MovieTracker.Controllers
             };
             return Ok(userDto);
         }
+
+        [HttpPost]
+        [Route("ChangeUserRole")]
+        public async Task<IActionResult> ChangeUserRole(string userId, string Role)
+        {
+            if (!await _roleManager.RoleExistsAsync(Role))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(Role));
+            }
+                
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            //remover roles
+            var removeRolesResult = await _userManager.RemoveFromRolesAsync(user, roles);
+            if (!removeRolesResult.Succeeded)
+            {
+                return BadRequest(removeRolesResult.Errors);
+            }
+
+            var addRolesResult = await _userManager.AddToRoleAsync(user, Role);
+            if (!addRolesResult.Succeeded)
+            {
+                return BadRequest(addRolesResult.Errors);
+            }
+
+            // El cambio de rol fue exitoso
+            return Ok();
+
+        }
+
     }
 }

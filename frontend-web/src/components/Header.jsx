@@ -56,6 +56,7 @@ function Header() {
             </NavDropdown>
           </Nav>
           <Nav>
+            {User.IsInRole("Admin") === true ? <Nav.Link href="/Users">Usuarios</Nav.Link> :  null}
             {User.IsAuthenticated() === true ? <Nav.Link href="/" onClick={handleLogout}>Logout</Nav.Link> :  <Nav.Link eventKey={2} href="/login">Login</Nav.Link>}
           </Nav>
         </Navbar.Collapse>
