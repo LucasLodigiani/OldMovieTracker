@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import User from '../../utils/User';
 import { base_url } from '../../utils/Config';
 
@@ -64,11 +65,8 @@ function Login() {
                 <p >{result}</p>
             </form>
 
-            <p>Informacion actual:</p>
             {User.IsAuthenticated() === true ? <p>Estas autenticado</p> : <p>No estas autenticado</p>}
         
-            {User.GetUserRole() !== false ? <p>Tu rol es {User.GetUserRole()}</p> : null}
-
         </>
     );
 }

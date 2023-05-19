@@ -9,6 +9,16 @@ class User {
     
     {User.GetUserRole() === "Admin" ? <p>Tu rol es admin</p> : <p>Tu rol es usuario u otro</p>}
     */
+    static DecodeToken(){
+        const jwtToken = localStorage.getItem('JWT')
+        if (jwtToken === null) {
+            return false
+        }
+        const parts = jwtToken.split('.');
+        const decodedPayload = JSON.parse(atob(parts[1]));
+        return decodedPayload;
+    }
+
     static GetUserRole() {
         const jwtToken = localStorage.getItem('JWT')
         if (jwtToken === null) {
@@ -17,10 +27,17 @@ class User {
 
         const parts = jwtToken.split('.');
         const decodedPayload = JSON.parse(atob(parts[1]));
+        console.log(decodedPayload);
         const { role } = decodedPayload;
         console.log(role);
         return role;
     }
+
+    static GetUserName(){
+        const { unique_name } = this.DecodeToken();
+        return unique_name;
+    }
+
 
     static IsInRole(role) {
         if (this.GetUserRole() === role && this.GetUserRole !== null) {
@@ -30,6 +47,8 @@ class User {
             return false;
         }
     }
+
+
 
     static IsAuthenticated() {
         const jwtToken = localStorage.getItem('JWT');

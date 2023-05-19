@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
+import {Badge}  from "react-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import User from '../utils/User';
@@ -56,8 +57,10 @@ function Header() {
             </NavDropdown>
           </Nav>
           <Nav>
-            {User.IsInRole("Admin") === true ? <Nav.Link href="/Users">Usuarios</Nav.Link> :  null}
-            {User.IsAuthenticated() === true ? <Nav.Link href="/" onClick={handleLogout}>Logout</Nav.Link> :  <Nav.Link eventKey={2} href="/login">Login</Nav.Link>}
+
+            {User.IsInRole("Admin") ? <Nav.Link href="/Users"><b>[Usuarios]</b></Nav.Link> :  null}
+            {User.IsAuthenticated() ? <Nav.Link href="/" onClick={handleLogout}>Logout</Nav.Link> :  <Nav.Link eventKey={2} href="/login">Login</Nav.Link>}
+            {User.IsAuthenticated() ? <Nav.Link>Bienvenido <Badge bg="danger">{User.GetUserRole()}</Badge> {User.GetUserName()}!</Nav.Link> : null}
           </Nav>
         </Navbar.Collapse>
       </Container>
