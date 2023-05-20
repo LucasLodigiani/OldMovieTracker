@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using MovieTracker.Models;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -67,6 +68,26 @@ namespace MovieTracker.Services
             return (1, token);
         }
 
+        //public async Task<bool> DeleteUser(string id)
+        //{
+        //    var user = await userManager.FindByIdAsync(id);
+        //    if (user == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    var result = await userManager.DeleteAsync(user);
+
+        //    if (result.Succeeded)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
+
 
         private string GenerateToken(IEnumerable<Claim> claims)
         {
@@ -85,6 +106,62 @@ namespace MovieTracker.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<(int, string)> TokenCheck(string jwt)
+        {
+            // Decodificar el token JWT
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var decodedToken = tokenHandler.ReadJwtToken(jwt);
+            // Acceder a los datos del token JWT
+            
+
+            //var userId = decodedToken.Subject;
+            var username = decodedToken.Claims.FirstOrDefault(c => c.Type == "unique_name")?.Value;
+            var role = decodedToken.Claims.FirstOrDefault(c => c.Type == "role")?.Value;
+
+            var user = await userManager.FindByNameAsync(username);
+
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            if (decodedToken.ValidTo < DateTime.UtcNow)
+            {
+                // El token ha expirado
+                var authClaims = new List<Claim>
+                {
+                   new Claim(ClaimTypes.Name, user.UserName),
+                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+                string token = GenerateToken(authClaims);
+                return (0, token);
+            }
+            else if (userRoles.FirstOrDefault() == role)
+            {
+                //El rol es el indicado para el token
+                return (1, "ok");
+            }
+            else
+            {
+                //El rol del token es diferente al rol en la bd
+                var authClaims = new List<Claim>
+                {
+                   new Claim(ClaimTypes.Name, user.UserName),
+                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+                string token = GenerateToken(authClaims);
+                return (2, token);
+            }
+
         }
     }
 }

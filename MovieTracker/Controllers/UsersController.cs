@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MovieTracker.Models;
 using MovieTracker.Models.DTO;
 using System.Data;
@@ -25,15 +26,38 @@ namespace MovieTracker.Controllers
         [Route("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var user = _userManager.Users
-            .Select(u => new UserDto
+            //var user = _userManager.Users
+            //.Select(u => new UserDto
+            //{
+            //    Id = u.Id,
+            //    Username = u.UserName,
+            //    Role = null,
+            //})
+            //.ToList();
+
+
+            //TO DO: Mejorar este codigo, es ineficiente en terminos de rendimiento porque realiza muchas consultas a la base de datos.
+            var users = await _userManager.Users.ToListAsync();
+
+            var userDtos = new List<UserDto>();
+
+            foreach (var user in users)
             {
-                Id = u.Id,
-                Username = u.UserName,
-            })
-            .ToList();
-            
-            return Ok(user);
+                var roles = await _userManager.GetRolesAsync(user);
+                var roleName = roles.FirstOrDefault();
+
+                var userDto = new UserDto
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Role = roleName
+                };
+
+                userDtos.Add(userDto);
+            }
+
+
+            return Ok(userDtos);
         }
 
         [HttpGet("id")]
@@ -86,6 +110,35 @@ namespace MovieTracker.Controllers
             return Ok();
 
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if(id == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+
+        }
+
 
     }
 }

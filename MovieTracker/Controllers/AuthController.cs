@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MovieTracker.Models;
 using MovieTracker.Services;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MovieTracker.Controllers
 {
@@ -65,12 +67,36 @@ namespace MovieTracker.Controllers
             }
         }
 
-        //[HttpGet]
-        //[Route("TokenCheck")]
-        //public async Task<IActionResult> TokenCheck()
-        //{
-        //    return Ok();
-        //}
+        [HttpGet]
+        [Route("TokenCheck")]
+        public async Task<IActionResult> TokenCheck()
+        {
+            // Obtener el valor del header "Authorization"
+            if (Request.Headers.TryGetValue("Authorization", out var authorizationHeaderValue))
+            {
+                // Verificar si el valor del header comienza con "Bearer "
+                var bearerToken = authorizationHeaderValue.FirstOrDefault();
+                if (!string.IsNullOrEmpty(bearerToken) && bearerToken.StartsWith("Bearer "))
+                {
+                    // Extraer el token JWT sin el prefijo "Bearer "
+                    var jwt = bearerToken.Substring(7);
+
+                    var (status, message) = await _authService.TokenCheck(jwt);
+                    if (status == 0)
+                    {
+                        return Ok(message);
+                    }
+                    else if(status == 2)
+                    {
+                        return Ok(message);
+                    }
+                    
+
+                    return NoContent();
+                }
+            }
+            return BadRequest("Token JWT no encontrado en el header de autorización.");
+        }
 
 
     }
