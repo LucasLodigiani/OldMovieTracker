@@ -80,6 +80,10 @@ namespace MovieTracker.Controllers
                 {
                     // Extraer el token JWT sin el prefijo "Bearer "
                     var jwt = bearerToken.Substring(7);
+                    if(jwt == "null")
+                    {
+                        return BadRequest();
+                    }
 
                     var (status, message) = await _authService.TokenCheck(jwt);
                     if (status == 0)

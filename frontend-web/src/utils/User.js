@@ -1,4 +1,4 @@
-
+import { base_url } from './Config'
 
 class User {
     /*Vistas condicionadas
@@ -63,12 +63,32 @@ class User {
 
         if (expDate < dateNow) {
             console.log('El token ha expirado.');
+            //this.TokenCheck();
             localStorage.removeItem('JWT');
             return false;
         } else {
             console.log('El token sigue siendo v�lido.');
             return true;
         }
+    }
+
+    static async TokenCheck(){
+        const response = await fetch(base_url + '/api/Auth/TokenCheck', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('JWT')}`
+            }
+        });
+        if(response.status === 200){
+            //Tener en cuenta que el servidor no devuelve un objeto json, simplemente devuelve el jwt por eso se lee como text().
+            const jwtToken = await response.text();
+
+            // Guardar el jwt en el localStorage
+            localStorage.setItem('JWT', jwtToken);
+
+            console.log(jwtToken);
+        }
+
     }
 
     static Logout(){

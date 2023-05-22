@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
 import { Row, Col } from "react-bootstrap";
 import { base_url } from "../utils/Config";
+import User from "../utils/User";
 
 function Home() {
+  User.TokenCheck();
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
