@@ -21,6 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddTransient<IMovieService, MovieService>();
 
+builder.Services.AddTransient<ICommentService, CommentService>();
+
 builder.Services.AddTransient<IAuthService, AuthService>();
 
 //SwaggerGEN

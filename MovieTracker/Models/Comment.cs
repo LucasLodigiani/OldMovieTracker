@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieTracker.Models
 {
@@ -13,9 +14,7 @@ namespace MovieTracker.Models
         
         public float Rate { get; set; }
 
-        public string? ParentId { get; set; }
-
-        public string MovieId { get; set; }
+        public Guid MovieId { get; set; }
 
         public  Movie Movie { get; set; }
 

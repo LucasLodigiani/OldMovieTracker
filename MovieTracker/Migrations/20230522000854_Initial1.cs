@@ -71,9 +71,10 @@ namespace MovieTracker.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReleaseDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    Rate = table.Column<float>(type: "real", nullable: false)
+                    Rate = table.Column<float>(type: "real", nullable: false),
+                    MediaUrl = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -210,6 +211,34 @@ namespace MovieTracker.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Rate = table.Column<float>(type: "real", nullable: false),
+                    MovieId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -251,6 +280,16 @@ namespace MovieTracker.Migrations
                 name: "IX_CategoryMovie_MoviesId",
                 table: "CategoryMovie",
                 column: "MoviesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_MovieId",
+                table: "Comments",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -275,13 +314,16 @@ namespace MovieTracker.Migrations
                 name: "CategoryMovie");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Movies");

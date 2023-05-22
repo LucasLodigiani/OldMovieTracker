@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MovieTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230425201205_Initial2")]
-    partial class Initial2
+    [Migration("20230522000854_Initial1")]
+    partial class Initial1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,6 +189,37 @@ namespace MovieTracker.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("MovieTracker.Models.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("real");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("MovieTracker.Models.Movie", b =>
                 {
                     b.Property<Guid>("Id")
@@ -201,6 +232,10 @@ namespace MovieTracker.Migrations
 
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("interval");
+
+                    b.Property<string>("MediaUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<float>("Rate")
                         .HasColumnType("real");
@@ -345,6 +380,25 @@ namespace MovieTracker.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieTracker.Models.Comment", b =>
+                {
+                    b.HasOne("MovieTracker.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieTracker.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

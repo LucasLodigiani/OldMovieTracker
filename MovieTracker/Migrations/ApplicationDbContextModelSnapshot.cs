@@ -186,6 +186,37 @@ namespace MovieTracker.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("MovieTracker.Models.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
+
+                    b.Property<float>("Rate")
+                        .HasColumnType("real");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("MovieTracker.Models.Movie", b =>
                 {
                     b.Property<Guid>("Id")
@@ -260,10 +291,6 @@ namespace MovieTracker.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -282,8 +309,6 @@ namespace MovieTracker.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -354,15 +379,23 @@ namespace MovieTracker.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MovieTracker.Models.User", b =>
+            modelBuilder.Entity("MovieTracker.Models.Comment", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                    b.HasOne("MovieTracker.Models.Movie", "Movie")
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Role");
+                    b.HasOne("MovieTracker.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

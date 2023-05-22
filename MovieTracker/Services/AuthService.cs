@@ -56,6 +56,7 @@ namespace MovieTracker.Services
             var userRoles = await userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
+               new Claim("unique_id", user.Id.ToString()),
                new Claim(ClaimTypes.Name, user.UserName),
                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };

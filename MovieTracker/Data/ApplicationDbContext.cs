@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MovieTracker.Models;
 using System.Reflection.Emit;
+using MovieTracker.Models.DTO;
 
 namespace MovieTracker.Data
 {
@@ -21,5 +22,7 @@ namespace MovieTracker.Data
         public DbSet<MovieTracker.Models.Movie> Movies { get; set; } = default!;
 
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<MovieTracker.Models.Comment> Comments { get; set; } = default!;
     }
 }

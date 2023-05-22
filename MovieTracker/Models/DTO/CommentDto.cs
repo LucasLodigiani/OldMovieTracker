@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace MovieTracker.Models.DTO
 {
@@ -7,10 +8,10 @@ namespace MovieTracker.Models.DTO
         [Key]
         public string Id { get; set; }
 
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         [Required]
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         public DateTime? Created { get; set; }
 
@@ -20,12 +21,11 @@ namespace MovieTracker.Models.DTO
         public string? Role { get; set; }
 
         [Required]
-        public string MovieId { get; set; }
-
-        public string? ParentId { get; set; }
+        public string? MovieId { get; set; }
 
         public string? UserId { get; set; }
 
-        public User? User { get; set; }
+        [JsonIgnore]
+        public virtual User? User { get; set; }
     }
 }
